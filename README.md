@@ -1,2 +1,4 @@
 # NEA-Timetable-Generator-
-NEA 
+pip install flask
+pip install flask-login
+pip install sqlalchemy
