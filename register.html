@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+    crossorigin="anonymous"
+  />
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    crossorigin="anonymous"
+  />
+    <title>Register Page</title>
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            {% if category == 'error' %}
+            <div class="alert alert-danger"  role="alert">
+                {{ message }}
+            </div>
+            {% else %}
+            <div class="alert alert-success"  role="alert">
+                {{ message }}
+            </div>
+            {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('auth.register')}}" method="post">
+    <h1 align="center">Register</h1>
+    <h1 align="center">
+    <input id="email" name="email" placeholder="Enter Email" type="email"><br>
+    <input id="firstname" name="firstname" placeholder="Enter First Name" type="text"><br>
+    <input id="lastname" name="lastname" placeholder="Enter Last Name" type="text"><br>
+    <input id="username" name="username" placeholder="Enter Username" type="username"><br>
+    <input id="password1" name="password1" placeholder="Enter Password" type="password"><br>
+    <input id="password2" name="password2" placeholder="Confirm Password" type="password"><br>
+    <button type="submit">Register</button><br>
+    </h1>
+    
+    
+</body>
+</html>
