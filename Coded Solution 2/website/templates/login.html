@@ -17,12 +17,28 @@
     <title>Login Page</title>
 </head>
 <body>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            {% if category == 'error' %}
+            <div class="alert alert-danger"  role="alert">
+                {{ message }}
+            </div>
+            {% else %}
+            <div class="alert alert-success"  role="alert">
+                {{ message }}
+            </div>
+            {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <form action="{{ url_for('auth.login')}}" method="post">
     <h1 align="center">Login</h1>
     <h1 align="center">
     <input id="username" name="username" placeholder="Enter Username" type="username"><br>
     <input id="password1" name="password1" placeholder="Enter Password" type="password"><br>
     <button type="submit">Login</button><br>
+    <a href="{{url_for('views.main')}}">Home Page</a><br>
     </h1>
     
     
