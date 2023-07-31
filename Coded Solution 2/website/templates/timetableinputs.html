@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+    crossorigin="anonymous"
+  />
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    crossorigin="anonymous"
+  />
+    <title>Timetable Inputs Page</title>
+</head>
+<body>
+    
+    <h2>Tick the days you are available</h2>
+    <input type="checkbox" id="monday" name="monday">Monday</input><br>
+    <input type="checkbox" id="tuesday" name="tuesday">Tuesday</input><br>
+    <input type="checkbox" id="wednesday" name="wednesday">Wednesday</input><br>
+    <input type="checkbox" id="thursday" name="thursday">Thursday</input><br>
+    <input type="checkbox" id="friday" name="friday">Friday</input><br>
+    <input type="checkbox" id="saturday" name="saturday">Saturday</input><br>
+    <input type="checkbox" id="sunday" name="sunday">Sunday</input><br>
+
+    <form action="{{ url_for('auth.input')}}" method="post">
+    <h2>Enter all of your A-Level subjects and how confident you are in each subject?</h2>
+    <input type="text" id="subject1" name="subject1">
+    <input type="number" id="confidence1" name="confidence1" min="1" max="10"><br>
+
+    <input type="text" id="subject2" name="subject2">
+    <input type="number" id="confidence2" name="confidence2" min="1" max="10"><br>
+
+    <input type="text" id="subject3" name="subject3">
+    <input type="number" id="confidence3" name="confidence3" min="1" max="10"><br>
+
+    <input type="text" id="subject4" name="subject4">
+    <input type="number" id="confidence4" name="confidence4" min="1" max="10"><br>
+    <button type="submit">Generate</button><br>
+</body>
+</html>
