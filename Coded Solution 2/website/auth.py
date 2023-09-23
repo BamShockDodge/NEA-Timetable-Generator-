@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 #Imports the flask login module
 from flask_login import login_user, login_required, logout_user, current_user
-
+from website import CSP
 #Creates the routes for the website 
 auth = Blueprint('auth', __name__) 
 
@@ -74,22 +74,28 @@ def logout():
     logout_user()
     return redirect(url_for('auth.login'))
 
-#Change name
+
+#Assigns entered web data into arrays
 @auth.route('/input', methods = ['GET', 'POST'])
 @login_required
 def input():
     if request.method == "POST":
-        subjects = []
-        confidences = []
-        subjects.append(request.form.get("subject1"))
-        subjects.append(request.form.get("subject2"))
-        subjects.append(request.form.get("subject3"))
-        subjects.append(request.form.get("subject4"))
+        #All Names and confidences are used as attributes to create subject objects
+        CSP.subjects.append(CSP.Subject(request.form.get("subject1"), request.form.get("confidence1")))
+        CSP.subjects.append(CSP.Subject(request.form.get("subject2"), request.form.get("confidence2")))
+        CSP.subjects.append(CSP.Subject(request.form.get("subject3"), request.form.get("confidence3")))
+        CSP.subjects.append(CSP.Subject(request.form.get("subject4"), request.form.get("confidence4")))
 
-        confidences.append(request.form.get("confidence1"))
-        confidences.append(request.form.get("confidence2"))
-        confidences.append(request.form.get("confidence3"))
-        confidences.append(request.form.get("confidence4"))
+        #The days the student is available is stored in a dictionary
+        for key in CSP.days_available.keys():
+            #If the box is checked the student is available on that day
+            if request.form.get(key) == 'on':
+                CSP.days_available[key] = True
+            else:
+                CSP.days_available[key] = False
+
+        #Calls the CSP function frequency to calculate subject frequencies
+        CSP.clean_data()
         
         return redirect(url_for('views.selection'))
 
