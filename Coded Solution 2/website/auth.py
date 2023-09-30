@@ -84,7 +84,8 @@ def input():
         CSP.subjects.append(CSP.Subject(request.form.get("subject1"), request.form.get("confidence1")))
         CSP.subjects.append(CSP.Subject(request.form.get("subject2"), request.form.get("confidence2")))
         CSP.subjects.append(CSP.Subject(request.form.get("subject3"), request.form.get("confidence3")))
-        CSP.subjects.append(CSP.Subject(request.form.get("subject4"), request.form.get("confidence4")))
+        if (request.form.get("subject4") != ''):
+            CSP.subjects.append(CSP.Subject(request.form.get("subject4"), request.form.get("confidence4")))
 
         #The days the student is available is stored in a dictionary
         for key in CSP.days_available.keys():

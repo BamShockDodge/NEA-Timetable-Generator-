@@ -1,3 +1,5 @@
+import math
+
 #Class defines subject name and its confidence level as a private variable
 class Subject():
     def __init__(self, name, confidence):
@@ -27,7 +29,7 @@ class Subject():
 
     #When the object is printed its attibutes are printed
     def __str__(self):
-        return f'{self.name}:{self.__confidence}'
+        return f'{self.name} Confidence:{self.__confidence} Sessions:{self.__sessions}'
     
 
 
@@ -36,7 +38,7 @@ def clean_data():
     #Both loops remove unnecessary 4th subject if nothing is inputted
     for subject in subjects:
         if subject.name == '':
-            subjects.remove(subject)
+            subjects.pop(3)
 
     
     #sessions_available is double the amount of days available
@@ -50,13 +52,34 @@ def clean_data():
     
 #Calculates the sessions available for each subject each week
 def calculate_sessions(sessions_available):
-    InverseTotal = 0
+    inverse_total = 0
+    #Calculates the total of the reciprocal of confidences
     for subject in subjects:
-        InverseTotal += 1/subject.get_confidence()
+        inverse_total += 1/subject.get_confidence()
     
+    #Total amount of sessions that are used by all the subjects
+    sessions = []
+    total_sessions = 0
+
     for subject in subjects:
-        subject.set_sessions(round(((1/subject.get_confidence())/InverseTotal) * sessions_available, 0))
-        print(subject.get_sessions())
+        #Total amount of sessions in a week rounded down
+        total_sessions += math.floor(((1/subject.get_confidence())/inverse_total) * sessions_available)
+
+        #for each subject its session count is set to the ratio of the reciporcal of confidence to the inverse total times by the sessions available all rounded down
+        sessions.append((math.floor(((1/subject.get_confidence())/inverse_total) * sessions_available)))
+        
+    #Gets the index of the highest session value
+    maximum_sessions_index = sessions.index(max(sessions))
+    #If there are leftover sessions they will be added to the highest session value
+    sessions[maximum_sessions_index] += (sessions_available - total_sessions)
+
+    #Assigns session values from local array to subject attributes through a setter method
+    for i in range(0, len(subjects)):
+        subjects[i].set_sessions(sessions[i])
+        
+        print(subjects[i])
+        
+
 
 #All arrays store data on subjects
 subjects = []
