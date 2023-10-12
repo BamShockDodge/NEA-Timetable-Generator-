@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 #Imports the flask login module
 from flask_login import login_user, login_required, logout_user, current_user
-from website import CSP
+from website import CSPValues
 #Creates the routes for the website 
 auth = Blueprint('auth', __name__) 
 
@@ -81,22 +81,22 @@ def logout():
 def input():
     if request.method == "POST":
         #All Names and confidences are used as attributes to create subject objects
-        CSP.subjects.append(CSP.Subject(request.form.get("subject1"), request.form.get("confidence1")))
-        CSP.subjects.append(CSP.Subject(request.form.get("subject2"), request.form.get("confidence2")))
-        CSP.subjects.append(CSP.Subject(request.form.get("subject3"), request.form.get("confidence3")))
+        CSPValues.subjects.append(CSPValues.Subject(request.form.get("subject1"), request.form.get("confidence1")))
+        CSPValues.subjects.append(CSPValues.Subject(request.form.get("subject2"), request.form.get("confidence2")))
+        CSPValues.subjects.append(CSPValues.Subject(request.form.get("subject3"), request.form.get("confidence3")))
         if (request.form.get("subject4") != ''):
-            CSP.subjects.append(CSP.Subject(request.form.get("subject4"), request.form.get("confidence4")))
+            CSPValues.subjects.append(CSPValues.Subject(request.form.get("subject4"), request.form.get("confidence4")))
 
         #The days the student is available is stored in a dictionary
-        for key in CSP.days_available.keys():
+        for key in CSPValues.days_available.keys():
             #If the box is checked the student is available on that day
             if request.form.get(key) == 'on':
-                CSP.days_available[key] = True
+                CSPValues.days_available[key] = True
             else:
-                CSP.days_available[key] = False
+                CSPValues.days_available[key] = False
 
         #Calls the CSP function frequency to calculate subject frequencies
-        CSP.clean_data()
+        CSPValues.clean_data()
         
         return redirect(url_for('views.selection'))
 
