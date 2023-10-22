@@ -54,7 +54,11 @@ def register():
         password_valid = ValidatePassword(password1, password2)
         if (email_valid == True and username_valid == True and password_valid == True):
             #Creates a new user in database using data and encrypts password using hashing function
-            new_user = User(email=email, firstname=firstname, lastname=lastname, username=username, password=generate_password_hash(password1, method='sha256'))
+            new_user = User(email=email, 
+            firstname=firstname, 
+            lastname=lastname, 
+            username=username, 
+            password=generate_password_hash(password1, method='sha256'))
             #Adds the new_user to the database
             db.session.add(new_user)
             #This change is saved
@@ -87,13 +91,25 @@ def input():
         if (request.form.get("subject4") != ''):
             CSPValues.subjects.append(CSPValues.Subject(request.form.get("subject4"), request.form.get("confidence4")))
 
+        #The day IDs correspond to the time available each day IDs
+        hours_available = {
+        'monday': 'time1',
+        'tuesday': 'time2',
+        'wednesday': 'time3',
+        'thursday': 'time4',
+        'friday': 'time5',
+        'saturday': 'time6',
+        'sunday': 'time7'
+        }
         #The days the student is available is stored in a dictionary
         for key in CSPValues.days_available.keys():
             #If the box is checked the student is available on that day
             if request.form.get(key) == 'on':
-                CSPValues.days_available[key] = True
+                CSPValues.days_available[key][0] = True
+                #Gets the time available to revise on that day and adds to the dictionary
+                CSPValues.days_available[key][1] = request.form.get(hours_available[key])
             else:
-                CSPValues.days_available[key] = False
+                CSPValues.days_available[key][0] = False
 
         #Calls the CSP function frequency to calculate subject frequencies
         CSPValues.clean_data()

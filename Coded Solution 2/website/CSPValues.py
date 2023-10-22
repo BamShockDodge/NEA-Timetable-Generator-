@@ -8,7 +8,7 @@ from website import CSPSolver
 class Subject():
     def __init__(self, name, confidence):
         self.name = name
-        self.__sessions = 0
+        self.__hours = 0
         #If the confidence has a string value then convert it to an integer, if confidence is '' print value error
         try:
             self.__confidence = int(confidence)
@@ -24,16 +24,16 @@ class Subject():
         self.__confidence = confidence
 
     #Returns the amount of revision sessions for the subject
-    def get_sessions(self):
-        return self.__sessions
+    def get_hours(self):
+        return self.__hours
     
-    #Sets the amount of revision sessions for the subject
-    def set_sessions(self, sessions):
-        self.__sessions = sessions
+    #Sets the amount of revision hours for the subject per week
+    def set_hours(self, hours):
+        self.__hours = hours
 
     #When the object is printed its attibutes are printed
     def __str__(self):
-        return f'{self.name} Confidence:{self.__confidence} Sessions:{self.__sessions}'
+        return f'{self.name} Confidence:{self.__confidence} Hours:{self.__hours}'
     
 
 
@@ -45,58 +45,75 @@ def clean_data():
             subjects.pop(3)
 
     
-    #sessions_available is double the amount of days available
-    sessions_available = 0
-    for key in days_available.keys():
-        if days_available[key] == True:
-            sessions_available += 2
-
-    #Calls function to work out how many sessions available each subject has each day.
-    calculate_sessions(sessions_available)
     
-#Calculates the sessions available for each subject each week
-def calculate_sessions(sessions_available):
+    #Calls function to work out how many hours available to study each subject in a week
+    calculate_hours()
+    
+#Calculates the hours available to study each subject each week
+def calculate_hours():
+    revision_hours = []
+    weekly_total = 0
     inverse_total = 0
+    total_hours = 0
+
+    #Bubble Sort for Subjects, orders them by confidences
+    for i in range(0, len(subjects)):
+        for j in range(0, len(subjects)-1):
+            if(subjects[j].get_confidence() > subjects[j+1].get_confidence()):
+                temp = subjects[j]
+                subjects[j] = subjects[j+1]
+                subjects[j+1] = temp
+
+    #Calculate the total time a student will revise in a week
+    for day, available in days_available.items():
+        weekly_total += int(available[1])
+
     #Calculates the total of the reciprocal of confidences
     for subject in subjects:
         inverse_total += 1/subject.get_confidence()
-    
-    #Total amount of sessions that are used by all the subjects
-    sessions = []
-    total_sessions = 0
 
     for subject in subjects:
-        #Total amount of sessions in a week rounded down
-        total_sessions += math.floor(((1/subject.get_confidence())/inverse_total) * sessions_available)
+        #Percentage of study sessions of a subject in a week
+        weight = ((1/subject.get_confidence())/inverse_total)
+        #How much time to spend revising a subject in a week
+        hours = round(weight*weekly_total, 0)
+        revision_hours.append(hours)
 
-        #for each subject its session count is set to the ratio of the reciporcal of confidence to the inverse total times by the sessions available all rounded down
-        sessions.append((math.floor(((1/subject.get_confidence())/inverse_total) * sessions_available)))
-        
-    #Gets the index of the highest session value
-    maximum_sessions_index = sessions.index(max(sessions))
-    #If there are leftover sessions they will be added to the highest session value
-    sessions[maximum_sessions_index] += (sessions_available - total_sessions)
+    #Calculate the total time a student will revise in a week
+    for hours in revision_hours:
+        total_hours += hours
+    
+    #If there is a difference in session_total and weekly_total the if statements will remove the difference
+    if (total_hours > weekly_total):
+        difference = abs(total_hours - weekly_total)
+        #Takes the difference off the largest value
+        revision_hours[-1] -= difference
+    elif(total_hours < weekly_total):
+        difference = abs(total_hours - weekly_total)
+        #Adds the difference to the smallest value
+        revision_hours[0] += difference
 
-    #Assigns session values from local array to subject attributes through a setter method
+    #Assigns revision_hours values from local array to subject attributes through a setter method
     for i in range(0, len(subjects)):
-        subjects[i].set_sessions(sessions[i])
+        subjects[i].set_hours(revision_hours[i])
         
         print(subjects[i])
-
-    #Assigns all the attributes for CSP class
+    print(days_available)
+    #Assigns all the attributes for CSPSolver class
     CSPSolver.assign_csp_values()
         
 
 
 #All arrays store data on subjects
 subjects = []
+#Stores the times the student is available and how long they can revise each day
 days_available = {
-    'monday': False,
-    'tuesday': False,
-    'wednesday': False,
-    'thursday': False,
-    'friday': False,
-    'saturday': False,
-    'sunday': False
+    'monday': [False, 0],
+    'tuesday': [False, 0],
+    'wednesday': [False, 0],
+    'thursday': [False, 0],
+    'friday': [False, 0],
+    'saturday': [False, 0],
+    'sunday': [False, 0]
 
 }

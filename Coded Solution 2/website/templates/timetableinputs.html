@@ -19,13 +19,26 @@
 <body>
     <form action="{{ url_for('auth.input')}}" method="post">
     <h2>Tick the days you are available</h2>
-    <input type="checkbox" id="monday" name="monday">Monday</input><br>
-    <input type="checkbox" id="tuesday" name="tuesday">Tuesday</input><br>
-    <input type="checkbox" id="wednesday" name="wednesday">Wednesday</input><br>
-    <input type="checkbox" id="thursday" name="thursday">Thursday</input><br>
-    <input type="checkbox" id="friday" name="friday">Friday</input><br>
-    <input type="checkbox" id="saturday" name="saturday">Saturday</input><br>
-    <input type="checkbox" id="sunday" name="sunday">Sunday</input><br>
+    <input type="checkbox" id="monday" name="monday">Monday</input>
+    <input type="number" id="time1" name="time1" min="1" max="3"><br>
+
+    <input type="checkbox" id="tuesday" name="tuesday">Tuesday</input>
+    <input type="number" id="time2" name="time2" min="1" max="3"><br>
+
+    <input type="checkbox" id="wednesday" name="wednesday">Wednesday</input>
+    <input type="number" id="time3" name="time3" min="1" max="3"><br>
+
+    <input type="checkbox" id="thursday" name="thursday">Thursday</input>
+    <input type="number" id="time4" name="time4" min="1" max="3"><br>
+
+    <input type="checkbox" id="friday" name="friday">Friday</input>
+    <input type="number" id="time5" name="time5" min="1" max="3"><br>
+
+    <input type="checkbox" id="saturday" name="saturday">Saturday</input>
+    <input type="number" id="time6" name="time6" min="1" max="3"><br>
+
+    <input type="checkbox" id="sunday" name="sunday">Sunday</input>
+    <input type="number" id="time7" name="time7" min="1" max="3"><br>
 
     <h2>Enter all of your A-Level subjects and how confident you are in each subject?</h2>
     <input type="text" id="subject1" name="subject1">
