@@ -1,6 +1,7 @@
 #Contains normal Routes
 from flask import Blueprint, render_template
 from flask_login import login_required, current_user
+from website import CSPSolver
 
 #Creates routes for website
 views = Blueprint('views', __name__) 
@@ -20,5 +21,5 @@ def home():
 @views.route("/selection")
 @login_required
 def selection():
-    return render_template("selection.html")
+    return render_template("selection.html", timetable1 = CSPSolver.timetable1, timetable2 = CSPSolver.timetable2, timetable3 = CSPSolver.timetable3)
     

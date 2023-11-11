@@ -44,8 +44,6 @@ def clean_data():
         if subject.name == '':
             subjects.pop(3)
 
-    
-    
     #Calls function to work out how many hours available to study each subject in a week
     calculate_hours()
     
@@ -77,6 +75,8 @@ def calculate_hours():
         weight = ((1/subject.get_confidence())/inverse_total)
         #How much time to spend revising a subject in a week
         hours = round(weight*weekly_total, 0)
+        if(hours == 0):
+            hours = 1
         revision_hours.append(hours)
 
     #Calculate the total time a student will revise in a week
@@ -117,3 +117,4 @@ days_available = {
     'sunday': [False, 0]
 
 }
+

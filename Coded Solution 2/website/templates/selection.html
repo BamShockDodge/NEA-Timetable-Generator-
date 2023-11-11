@@ -18,5 +18,34 @@
 </head>
 <body>
     <h1>This is the selection page</h1>
+    <table>
+        {% for key, value in timetable1.items() %}
+        <tr>
+            <td> {{ key }} </td>
+            <td> {{ value }} </td>
+        </tr>
+       {% endfor %}
+    </table>
+    <input type="checkbox" id="timetable1" name="timetable1"></input>
+    <br>
+    <table>
+      {% for key, value in timetable2.items() %}
+      <tr>
+          <td> {{ key }} </td>
+          <td> {{ value }} </td>
+      </tr>
+     {% endfor %}
+  </table>
+  <input type="checkbox" id="timetable2" name="timetable2"></input>
+  <br>
+  <table>
+    {% for key, value in timetable3.items() %}
+    <tr>
+        <td> {{ key }} </td>
+        <td> {{ value }} </td>
+    </tr>
+   {% endfor %}
+</table>
+<input type="checkbox" id="timetable3" name="timetable3"></input>
 </body>
 </html>
