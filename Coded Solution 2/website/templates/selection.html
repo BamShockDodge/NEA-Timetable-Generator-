@@ -15,37 +15,41 @@
     crossorigin="anonymous"
   />
     <title>Selection Page</title>
+  
 </head>
 <body>
     <h1>This is the selection page</h1>
-    <table>
-        {% for key, value in timetable1.items() %}
+      {% for timetable in timetables %}
+      <table>
+        {% for key, value in timetable.items() %}
         <tr>
-            <td> {{ key }} </td>
-            <td> {{ value }} </td>
+            <td> {{ key }}</td>
+            <td> {{ value }}</td>
         </tr>
-       {% endfor %}
-    </table>
-    <input type="checkbox" id="timetable1" name="timetable1"></input>
-    <br>
-    <table>
-      {% for key, value in timetable2.items() %}
-      <tr>
-          <td> {{ key }} </td>
-          <td> {{ value }} </td>
-      </tr>
-     {% endfor %}
-  </table>
-  <input type="checkbox" id="timetable2" name="timetable2"></input>
-  <br>
-  <table>
-    {% for key, value in timetable3.items() %}
-    <tr>
-        <td> {{ key }} </td>
-        <td> {{ value }} </td>
-    </tr>
-   {% endfor %}
-</table>
-<input type="checkbox" id="timetable3" name="timetable3"></input>
+        {% endfor %}
+      </table><br>
+      {% endfor %}
+<br>
+<form action="{{ url_for('auth.selection')}}" method="post">
+<input type="checkbox" class="timetable" id="timetable1" name="timetable1" onclick="uncheck_on_click(this)">Timetable 1</input><br>
+<input type="checkbox" class="timetable" id="timetable2" name="timetable2" onclick="uncheck_on_click(this)">Timetable 2</input><br>
+<input type="checkbox" class="timetable" id="timetable3" name="timetable3" onclick="uncheck_on_click(this)">Timetable 3</input><br>
+<input type="submit">
+</form>
+<script>
+  function uncheck_on_click(checkedbox)
+  {
+    //Gets all checkboxes with class timetable and adds them to a list
+    var checkboxes_list = document.getElementsByClassName("timetable");
+    //Loops through whole list of checkboxes and unchecks them all
+    for(var i = 0; i < checkboxes_list.length; i++)
+    {
+        //Unchecks the item at index i in the list
+        checkboxes_list.item(i).checked = false;  
+    }
+    //Checks the checkbox that was passed into the function which is the one that the user clicked
+    checkedbox.checked = true
+  }
+</script>
 </body>
 </html>

@@ -7,7 +7,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 #Imports the flask login module
 from flask_login import login_user, login_required, logout_user, current_user
-from website import CSPValues
+from website import generator_values
+from website import generator
+
 #Creates the routes for the website 
 auth = Blueprint('auth', __name__) 
 
@@ -26,8 +28,8 @@ def login():
             if check_password_hash(user.password, password1):
                 flash('Login Successful', category='success')
                 login_user(user, remember=True)
-                #Sends user to home page
-                return redirect(url_for('views.home'))
+                #Sends user to start page
+                return redirect(url_for('views.start'))
             else:
                 flash('Incorrect password', category='error')
         else:
@@ -66,8 +68,8 @@ def register():
             #The user is then logged in
             login_user(new_user, remember=True)
             flash('Account created!', category='success')
-            #User redirected to home page after registering
-            return redirect(url_for('views.home'))
+            #User redirected to start page after registering
+            return redirect(url_for('views.start'))
             
     #Reloads the registering page
     return render_template("register.html", user=current_user)
@@ -85,11 +87,11 @@ def logout():
 def input():
     if request.method == "POST":
         #All Names and confidences are used as attributes to create subject objects
-        CSPValues.subjects.append(CSPValues.Subject(request.form.get("subject1"), request.form.get("confidence1")))
-        CSPValues.subjects.append(CSPValues.Subject(request.form.get("subject2"), request.form.get("confidence2")))
-        CSPValues.subjects.append(CSPValues.Subject(request.form.get("subject3"), request.form.get("confidence3")))
+        generator_values.subjects.append(generator_values.Subject(request.form.get("subject1"), request.form.get("confidence1")))
+        generator_values.subjects.append(generator_values.Subject(request.form.get("subject2"), request.form.get("confidence2")))
+        generator_values.subjects.append(generator_values.Subject(request.form.get("subject3"), request.form.get("confidence3")))
         if (request.form.get("subject4") != ''):
-            CSPValues.subjects.append(CSPValues.Subject(request.form.get("subject4"), request.form.get("confidence4")))
+            generator_values.subjects.append(generator_values.Subject(request.form.get("subject4"), request.form.get("confidence4")))
 
         #The day IDs correspond to the time available each day IDs
         hours_available = {
@@ -102,23 +104,40 @@ def input():
         'sunday': 'time7'
         }
         #The days the student is available is stored in a dictionary
-        for key in CSPValues.days_available.keys():
+        for key in generator_values.days_available.keys():
             #If the box is checked the student is available on that day
             if request.form.get(key) == 'on':
-                CSPValues.days_available[key][0] = True
+                generator_values.days_available[key][0] = True
                 #Gets the time available to revise on that day and adds to the dictionary
-                CSPValues.days_available[key][1] = request.form.get(hours_available[key])
+                generator_values.days_available[key][1] = request.form.get(hours_available[key])
             else:
-                CSPValues.days_available[key][0] = False
+                generator_values.days_available[key][0] = False
 
         #Calls the CSP function frequency to calculate subject frequencies
-        CSPValues.clean_data()
+        generator_values.clean_data()
         
-        return redirect(url_for('views.selection'))
+        return redirect(url_for('auth.selection'))
 
 
     return render_template("timetableinputs.html")
 
+
+@auth.route("/selection",  methods = ['GET', 'POST'])
+@login_required
+def selection():
+    if request.method == "POST":
+        checkboxes = []
+        checkboxes.append(request.form.get("timetable1"))
+        checkboxes.append(request.form.get("timetable2"))
+        checkboxes.append(request.form.get("timetable3"))
+        for i in range(0, 3):
+            if checkboxes[i] == 'on':
+                global current_timetable
+                current_timetable = generator.timetables[i]
+                return redirect(url_for('views.home'))
+
+
+    return render_template("selection.html", timetables = generator.timetables)
 
 #Function takes in email and checks if it is valid
 def ValidateEmail(email):

@@ -14,20 +14,12 @@
     href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     crossorigin="anonymous"
   />
-    <title>Home page</title>
+    <title>Start page</title>
 </head>
 <body>
-    <h1>Home Page</h1>
-    <table>
-    {% if current_timetable != None %}
-        {% for key, value in current_timetable.items() %}
-        <tr>
-            <td> {{ key }} </td>
-            <td> {{ value }} </td>
-        </tr>
-       {% endfor %}
-    {% endif %}
-    </table>
+    <h1>Start Page</h1>
+    <a href="{{url_for('auth.input')}}">Generate A New Timetable</a><br>
+    <a href="{{url_for('auth.logout')}}">Logout</a><br>
     
 </body>
 </html>

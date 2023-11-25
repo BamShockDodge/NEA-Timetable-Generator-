@@ -1,7 +1,7 @@
 #Contains normal Routes
 from flask import Blueprint, render_template
 from flask_login import login_required, current_user
-from website import CSPSolver
+from website import auth
 
 #Creates routes for website
 views = Blueprint('views', __name__) 
@@ -10,16 +10,21 @@ views = Blueprint('views', __name__)
 def main():
     return render_template("main.html")
 
+#Decorate for start function
+@views.route('/start')
+#Decorator that states that login is required
+@login_required
+#Function loads start.html webpage when called
+def start():
+    return render_template("start.html")
+
 #Decorate for home function
 @views.route('/home')
 #Decorator that states that login is required
 @login_required
-#Function loads home.html webpage when called
+#Function loads start.html webpage when called
 def home():
-    return render_template("home.html")
+    return render_template("home.html", current_timetable = auth.current_timetable)
 
-@views.route("/selection")
-@login_required
-def selection():
-    return render_template("selection.html", timetable1 = CSPSolver.timetable1, timetable2 = CSPSolver.timetable2, timetable3 = CSPSolver.timetable3)
+
     
