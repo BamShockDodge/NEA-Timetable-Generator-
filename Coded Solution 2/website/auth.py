@@ -1,6 +1,6 @@
 #Authentication routes
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User
+from .models import User, Timetable
 #Imports encrpytion algorithm and hashing
 from werkzeug.security import generate_password_hash, check_password_hash
 #Imports the database
@@ -9,6 +9,7 @@ from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 from website import generator_values
 from website import generator
+
 
 #Creates the routes for the website 
 auth = Blueprint('auth', __name__) 
@@ -28,8 +29,16 @@ def login():
             if check_password_hash(user.password, password1):
                 flash('Login Successful', category='success')
                 login_user(user, remember=True)
-                #Sends user to start page
-                return redirect(url_for('views.start'))
+                
+                #Gets Row from dicionary table using the user_id as a foreign key
+                timetable = Timetable.query.filter_by(user_id=user.id).first()
+
+                #if there is no timetable connected to user id redirect to start page
+                if timetable == None:
+                    return redirect(url_for('views.start'))
+                #if there is a timetable connected to user id redirect to home page
+                else:
+                    return redirect(url_for('views.home', timetable=timetable.data))
             else:
                 flash('Incorrect password', category='error')
         else:
@@ -132,9 +141,15 @@ def selection():
         checkboxes.append(request.form.get("timetable3"))
         for i in range(0, 3):
             if checkboxes[i] == 'on':
-                global current_timetable
+                #Set current_timetable to the timetable picked
                 current_timetable = generator.timetables[i]
-                return redirect(url_for('views.home'))
+                #Add this timetable to the database with the current user id as a foreign key
+                new_timetable = Timetable(data=current_timetable, user_id=current_user.id)
+                db.session.add(new_timetable)
+                #Commit changes to the database
+                db.session.commit()
+                #Redirect to the home page with the current_timetable as the argument
+                return redirect(url_for('views.home', timetable = current_timetable))
 
 
     return render_template("selection.html", timetables = generator.timetables)

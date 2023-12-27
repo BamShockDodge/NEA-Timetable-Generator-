@@ -1,7 +1,9 @@
 #Contains normal Routes
 from flask import Blueprint, render_template
 from flask_login import login_required, current_user
-from website import auth
+
+
+
 
 #Creates routes for website
 views = Blueprint('views', __name__) 
@@ -19,12 +21,11 @@ def start():
     return render_template("start.html")
 
 #Decorate for home function
-@views.route('/home')
+@views.route('/home/<timetable>')
 #Decorator that states that login is required
 @login_required
 #Function loads start.html webpage when called
-def home():
-    return render_template("home.html", current_timetable = auth.current_timetable)
+def home(timetable):
+    return render_template("home.html", current_timetable = eval(timetable))
 
 
-    

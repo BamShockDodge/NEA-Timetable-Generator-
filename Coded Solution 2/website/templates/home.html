@@ -8,16 +8,19 @@
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
     crossorigin="anonymous"
-  />
-  <link
+    />
+    <link
     rel="stylesheet"
     href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     crossorigin="anonymous"
-  />
+    />
+
+    
     <title>Home page</title>
 </head>
 <body>
-    <h1>Home Page</h1>
+    <h1>Home Page</h1><br>
+    
     <table>
     {% if current_timetable != None %}
         {% for key, value in current_timetable.items() %}
@@ -28,6 +31,63 @@
        {% endfor %}
     {% endif %}
     </table>
-    
+
+    <div class="container">
+        <div class="header">
+            <h1>Pomodoro Timer</h1>
+        </div>
+
+        <div class="timer">
+            <h1 id="timer">25:00</h1>
+        </div>
+
+        <div class="buttons">
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+            <button id="reset">Reset</button>
+        </div>
+    </div>    
+
+    <script>
+        const start = document.getElementById('start');
+        const stop = document.getElementById('stop');
+        const reset = document.getElementById('reset');
+        
+        const timer = document.getElementById('timer');
+        
+        let minutes = 25;
+        let seconds = 0;
+        let timerId;
+        
+        console.log(timer,"timer");
+        start.addEventListener('click', () => {
+            timerId=setInterval(() => {
+        
+                if( seconds === 0 ) {
+                    seconds = 59;
+                    if( minutes !== 0 ){
+                        minutes--;
+                    }
+        
+                }else{
+                    seconds--;
+                }
+                console.log(seconds);
+                console.log(minutes);
+                timer.innerHTML = `${minutes}:${seconds}`;
+            }, 1000);
+        });
+        
+        stop.addEventListener('click', () => {
+            clearInterval(timerId);
+        });
+        
+        reset.addEventListener('click', () => {
+            minutes = 25;
+            seconds = 0;
+            timer.innerHTML = `${minutes}:0${seconds}`;
+        })
+    </script> 
+  
 </body>
 </html>

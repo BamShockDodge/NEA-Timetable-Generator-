@@ -28,7 +28,7 @@ def create_app():
     app.register_blueprint(auth, url_prefix='/')
 
     #Import database and tables
-    from .models import User
+    from .models import User, Timetable
 
     #Creates the database
     with app.app_context():

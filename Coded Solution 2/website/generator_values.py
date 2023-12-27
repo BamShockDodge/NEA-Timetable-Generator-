@@ -1,8 +1,4 @@
-import math
-import subprocess
 from website import generator
-
-
 
 #Class defines subject name and its confidence level as a private variable
 class Subject():
@@ -99,7 +95,7 @@ def calculate_hours():
         
         print(subjects[i])
     print(days_available)
-    #Assigns all the attributes for generator class
+    #Calls the create_timetable_options function from the other class
     generator.create_timetable_options()
         
 
