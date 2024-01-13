@@ -122,7 +122,7 @@ def input():
             else:
                 generator_values.days_available[key][0] = False
 
-        #Calls the CSP function frequency to calculate subject frequencies
+        #Calls the generator_values function clean data
         generator_values.clean_data()
         
         return redirect(url_for('auth.selection'))
@@ -143,9 +143,16 @@ def selection():
             if checkboxes[i] == 'on':
                 #Set current_timetable to the timetable picked
                 current_timetable = generator.timetables[i]
-                #Add this timetable to the database with the current user id as a foreign key
-                new_timetable = Timetable(data=current_timetable, user_id=current_user.id)
-                db.session.add(new_timetable)
+                #Checks to see if there already is timetable linked to user id
+                timetable = Timetable.query.filter_by(user_id=current_user.id).first()
+                #If there isn't then add timetable to table
+                if(timetable == None):
+                    #Add this timetable to the database with the current user id as a foreign key
+                    new_timetable = Timetable(data=current_timetable, user_id=current_user.id)
+                    db.session.add(new_timetable)
+                #If there is replace old timetable with new generated timetable
+                else:
+                    timetable.data = current_timetable
                 #Commit changes to the database
                 db.session.commit()
                 #Redirect to the home page with the current_timetable as the argument

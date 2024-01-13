@@ -17,7 +17,7 @@
     <title>Timetable Inputs Page</title>
 </head>
 <body>
-    <form action="{{ url_for('auth.input')}}" method="post">
+    <form action="{{ url_for('auth.input')}}" method="post" onsubmit="return check_minimum_checkboxes()">
     <h2>Tick the days you are available</h2>
     <input type="checkbox" id="monday" name="monday">Monday</input>
     <input type="number" id="time1" name="time1" min="1" max="3"><br>
@@ -53,5 +53,25 @@
     <input type="text" id="subject4" name="subject4">
     <input type="number" id="confidence4" name="confidence4" min="1" max="10"><br>
     <button type="submit">Generate</button><br>
+
+    <script>
+      function check_minimum_checkboxes()
+      {
+        //Gets all html elements with the input type checkbox that are checked and stores them in an array
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        //Gets the length of the array which is the number of ticked checkboxes
+        var checkbox_num = checkboxes.length;
+        //If less than 3 checkboxes ticked return false else return true
+        if(checkbox_num < 3)
+        {
+          alert("Please select at least three checkboxes(days) where you are available to revise.");
+          return false;
+        }
+        else
+        {
+          return true;
+        }
+      }
+    </script>
 </body>
 </html>
