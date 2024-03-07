@@ -39,10 +39,60 @@ def clean_data():
     for subject in subjects:
         if subject.name == '':
             subjects.pop(3)
-
+    
     #Calls function to work out how many hours available to study each subject in a week
     calculate_hours()
-    
+
+#Performs a merge sort recursively
+def merge_sort(subjects):
+    #if the length of subjects array is more than one then perform merge sort
+    if len(subjects) > 1:
+        #Split the subjects array into two separate lists
+        left_subjects = subjects[0:len(subjects)//2]
+        right_subjects = subjects[len(subjects)//2:len(subjects)]
+        
+        #Recursively call the function to split these two lists into smaller lists
+        #This proccess repeats until the subjects array is split into multiple lists each containing one element
+        merge_sort(left_subjects)
+        merge_sort(right_subjects)
+        
+        #Keeps track of left list index
+        i=0 
+        #Keeps track of right list index
+        j=0 
+        #Keeps track of the merged list that is being created
+        k=0 
+        
+        while i < len(left_subjects) and j < len(right_subjects):
+            #If the starting element of the left list is less than the right list add this element to the merged list and increment left list index
+            if left_subjects[i].get_confidence() < right_subjects[j].get_confidence():
+                subjects[k] = left_subjects[i]
+                i += 1  
+            #If not add the element from the right list to the merged list and increment the right list index
+            else:
+                subjects[k] = right_subjects[j]
+                j += 1        
+            k += 1
+                  
+        #If all the right list elements have been added to the merged list, then add all the left list elements
+        while i < len(left_subjects):
+            subjects[k] = left_subjects[i]
+            i += 1
+            k += 1
+            
+        #If all the left list elements have been added to the merged list, then add all the right list elements
+        while j < len(right_subjects):
+            subjects[k] = right_subjects[j]
+            j += 1
+            k += 1
+
+    #Return the sorted subjects array
+    return subjects
+
+
+
+
+
 #Calculates the hours available to study each subject each week
 def calculate_hours():
     revision_hours = []
@@ -50,14 +100,11 @@ def calculate_hours():
     inverse_total = 0
     total_hours = 0
 
-    #Bubble Sort for Subjects, orders them by confidences
-    for i in range(0, len(subjects)):
-        for j in range(0, len(subjects)-1):
-            if(subjects[j].get_confidence() > subjects[j+1].get_confidence()):
-                temp = subjects[j]
-                subjects[j] = subjects[j+1]
-                subjects[j+1] = temp
-
+    #Makes subjects array global variable so it can be assigned to the result of merge sort
+    global subjects
+    #Calls the merge sort function to sort subjects in ascending order of confidences
+    subjects = merge_sort(subjects)
+  
     #Calculate the total time a student will revise in a week
     for day, available in days_available.items():
         weekly_total += int(available[1])
@@ -113,4 +160,3 @@ days_available = {
     'sunday': [False, 0]
 
 }
-
