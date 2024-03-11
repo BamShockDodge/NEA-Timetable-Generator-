@@ -10,7 +10,6 @@ from flask_login import login_user, login_required, logout_user, current_user
 from website import generator_values
 from website import generator
 
-
 #Creates the routes for the website 
 auth = Blueprint('auth', __name__) 
 
@@ -142,7 +141,7 @@ def selection():
         for i in range(0, 3):
             if checkboxes[i] == 'on':
                 #Set current_timetable to the timetable picked
-                current_timetable = generator.timetables[i]
+                current_timetable = generator.options[i]
                 #Checks to see if there already is timetable linked to user id
                 timetable = Timetable.query.filter_by(user_id=current_user.id).first()
                 #If there isn't then add timetable to table
@@ -155,11 +154,17 @@ def selection():
                     timetable.data = current_timetable
                 #Commit changes to the database
                 db.session.commit()
+                
+                #Clear all global variables so they can be used again when another revision timetable is generated
+                generator_values.subjects = []
+                generator.options = []
+                generator.timetables = []
+                generator.subject_blocks = []
                 #Redirect to the home page with the current_timetable as the argument
                 return redirect(url_for('views.home', timetable = current_timetable))
 
 
-    return render_template("selection.html", timetables = generator.timetables)
+    return render_template("selection.html", options = generator.options)
 
 #Function takes in email and checks if it is valid
 def ValidateEmail(email):

@@ -19,9 +19,9 @@
 </head>
 <body>
     <h1>This is the selection page</h1>
-      {% for timetable in timetables %}
+      {% for option in options %}
       <table>
-        {% for key, value in timetable.items() %}
+        {% for key, value in option.items() %}
         <tr>
             <td> {{ key }}</td>
             <td> {{ value }}</td>
@@ -50,6 +50,7 @@
     //Checks the checkbox that was passed into the function which is the one that the user clicked
     checkedbox.checked = true
   }
+
 </script>
 </body>
 </html>
